@@ -1,39 +1,57 @@
 import { useFormik } from "formik";
+import * as Yup from "yup"
+// const nameRegex = /^[\u0600-\u06FFa-zA-Z\s]{3,50}$/;
 
-const nameRegex = /^[\u0600-\u06FFa-zA-Z\s]{3,50}$/;
+// const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+// const passwordRegex =
+//   /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@#$!%&*])[A-Za-z0-9@#$!%&*]{8,}$/;
+ 
 
-const passwordRegex =
-  /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@#$!%&*])[A-Za-z0-9@#$!%&*]{8,}$/;
+  const initialValues  ={
+    name : '',
+    email : '',
+    password : '',
+  };  
+  const onSubmit =  values=>{
+    console.log(values);  
+  }
+  // const validate = values=>{
+  //  const errors = {};
+  //     if (!values.name.trim()) {
+  //       errors.name = "این قسمت را پر کنید";
+  //     } else if (!nameRegex.test(values.name.trim())) {
+  //       errors.name = "نام باید بین 3 تا 50 حرف باشد";
+  //     }
+  //     if (!values.email.trim()) {
+  //       errors.email = "این قسمت را پر کنید";
+  //     } else if (!emailRegex.test(values.email)) {
+  //       errors.email = "فرمت ایمیل صحیح نیست";
+  //     }
+  //     if (!values.password) {
+  //       errors.password = "این قسمت را پر کنید";
+  //     } else if (!passwordRegex.test(values.password)) {
+  //       errors.password ="رمز عبور باید حداقل ۸ کاراکتر و شامل حروف کوچک، بزرگ، عدد و علامت باشد";
+  //     }
+  //     return errors;
+  // }
+
+  const validationSchema = Yup.object({
+    name : Yup.string().required('لطفا این قسمت را پر کنید'),
+    email : Yup.string().required('لطفا این قسمت را پر کنید').email('فرمت ایمیل را صحیح وارد کنید aaa@example.bbb'),
+    password: Yup.string()
+  .required('رمز عبور الزامی است')
+  .min(8, 'رمز عبور باید حداقل ۸ کاراکتر باشد')
+  })
+
 
 export default function EmptyForm() {
-  const formik = useFormik({
-    initialValues: {
-      name: "",
-      email: "",
-      password: "",
-    },
-    validate: (values) => {
-      const errors = {};
-      if (!values.name.trim()) {
-        errors.name = "این قسمت را پر کنید";
-      } else if (!nameRegex.test(values.name.trim())) {
-        errors.name = "نام باید بین 3 تا 50 حرف باشد";
-      }
-      if (!values.email.trim()) {
-        errors.email = "این قسمت را پر کنید";
-      } else if (!emailRegex.test(values.email)) {
-        errors.email = "فرمت ایمیل صحیح نیست";
-      }
-      if (!values.password) {
-        errors.password = "این قسمت را پر کنید";
-      } else if (!passwordRegex.test(values.password)) {
-        errors.password ="رمز عبور باید حداقل ۸ کاراکتر و شامل حروف کوچک، بزرگ، عدد و علامت باشد";
-      }
-      return errors;
-    },
-  });
+const formik = useFormik({
+  initialValues ,
+  onSubmit,
+  validationSchema,
+})
+
 
   console.log(formik.values);
   return (
@@ -50,11 +68,11 @@ export default function EmptyForm() {
 
         <div className="flex flex-col sm:flex-row sm:gap-3">
           <div className="flex-1 min-w-0 mb-4">
-            <label htmlFor="lastName" className="block text-sm mb-1.5">
+            <label htmlFor="name" className="block text-sm mb-1.5">
               نام و خانوادگی
             </label>
             <input
-              id="lastName"
+              id="name"
               type="text"
               name="name"
               value={formik.values.name}
@@ -114,12 +132,12 @@ export default function EmptyForm() {
           ) : null}
         </div>
 
-        <button
-          type="submit"
-          className="w-full py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-700"
-        >
-          ورود
-        </button>
+        <button className="py-2 px-4 rounded-lg mx-auto bg-blue-500 w-full"
+  type="submit"
+  disabled={formik.isSubmitting}
+>
+  {formik.isSubmitting ? 'در حال ارسال...' : 'ورود'}
+</button>
       </form>
     </div>
   );
