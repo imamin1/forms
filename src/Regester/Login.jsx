@@ -1,5 +1,7 @@
 import { ErrorMessage, FastField, Form, Formik } from "formik";
 import * as Yup from "yup";
+import PersonalFeild from "./PersonalField";
+import PersonalError from "./PersonalError";
 // const nameRegex = /^[\u0600-\u06FFa-zA-Z\s]{3,50}$/;
 
 // const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -11,6 +13,7 @@ const initialValues = {
   name: "",
   email: "",
   password: "",
+  bio: ''
 };
 const onSubmit = (values) => {
   console.log(values);
@@ -61,7 +64,7 @@ export default function EmptyForm() {
       <div className="min-h-screen flex items-center justify-center p-4 bg-slate-100 text-slate-800">
         <Form
           dir="rtl"
-          className="w-full max-w-md bg-white p-6 rounded-2xl shadow-md border-2 border-gray-400"
+          className="w-full max-w-md bg-white p-6 rounded-2xl shadow-lg border-2 border-gray-400"
         >
           <h1 className="text-3xl text-center font-bold mb-4">ورود</h1>
           <p className="text-sm text-center text-slate-500 mb-6">
@@ -79,7 +82,7 @@ export default function EmptyForm() {
                 name="name"
                 className="w-full px-3 py-2.5 border border-slate-300 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:border-blue-600"
               />
-              <ErrorMessage name="name" />
+              <ErrorMessage name="name" component={PersonalError}/>
             </div>
           </div>
 
@@ -94,7 +97,7 @@ export default function EmptyForm() {
               dir="ltr"
               className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:border-blue-600"
             />
-            <ErrorMessage name="email" />
+            <ErrorMessage name="email" component={PersonalError}/>
           </div>
 
           <div className="mb-6">
@@ -102,19 +105,32 @@ export default function EmptyForm() {
               رمز عبور
             </label>
             <FastField
-              id="password"
-              type="password"
               name="password"
-              dir="ltr"
               className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:border-blue-600"
-            />
-            <ErrorMessage name="password" />
+            >
+              {props => <PersonalFeild {...props}/>}
+            </FastField>
           </div>
 
+          <div className="mb-6">
+            <label htmlFor="bio" className="block text-sm mb-1.5">
+              بیوگرافی
+            </label>
+            <FastField
+              id="bio"
+              type="bio"
+              name="bio"
+              dir="ltr"
+              component="textarea"
+              className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:border-blue-600"
+            />
+            <ErrorMessage name="bio" />
+          </div>
           <button
-            className="py-2 px-4 rounded-lg mx-auto bg-blue-500 w-full"
+            className="py-2 px-4 rounded-lg mx-auto text-white bg-blue-500 w-full"
             type="submit"
           >
+            ورود به حساب
           </button>
         </Form>
       </div>
