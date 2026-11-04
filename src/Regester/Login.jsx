@@ -1,7 +1,8 @@
-import { ErrorMessage, FastField, Form, Formik } from "formik";
+import { ErrorMessage, FastField, FieldArray, Form, Formik } from "formik";
 import * as Yup from "yup";
 import PersonalFeild from "./PersonalField";
 import PersonalError from "./PersonalError";
+import FavoritsField from "./FavoritsField";
 // const nameRegex = /^[\u0600-\u06FFa-zA-Z\s]{3,50}$/;
 
 // const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -13,7 +14,13 @@ const initialValues = {
   name: "",
   email: "",
   password: "",
-  bio: ''
+  bio: "",
+  addres: {
+    city: "",
+    postalCode: "",
+  },
+  phone: ["", ""],
+  favorits: [""],
 };
 const onSubmit = (values) => {
   console.log(values);
@@ -46,6 +53,11 @@ const validationSchema = Yup.object({
   password: Yup.string()
     .required("رمز عبور الزامی است")
     .min(8, "رمز عبور باید حداقل ۸ کاراکتر باشد"),
+  addres: Yup.object({
+    city: Yup.string().required("نام شهر خود را وارد کنید"),
+    postalCode: Yup.string().required(" کدپستی خود را وارد کنید"),
+  }),
+  phone: Yup.array().of(Yup.string().required("لطفا این قسمت را پر کنید")),
 });
 
 export default function EmptyForm() {
@@ -66,7 +78,7 @@ export default function EmptyForm() {
           dir="rtl"
           className="w-full max-w-md bg-white p-6 rounded-2xl shadow-lg border-2 border-gray-400"
         >
-          <h1 className="text-3xl text-center font-bold mb-4">ورود</h1>
+          <h1 className="text-3xl text-center font-bold mb-4">ثبت نام</h1>
           <p className="text-sm text-center text-slate-500 mb-6">
             اطلاعات خودت رو وارد کن.
           </p>
@@ -82,7 +94,7 @@ export default function EmptyForm() {
                 name="name"
                 className="w-full px-3 py-2.5 border border-slate-300 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:border-blue-600"
               />
-              <ErrorMessage name="name" component={PersonalError}/>
+              <ErrorMessage name="name" component={PersonalError} />
             </div>
           </div>
 
@@ -97,7 +109,7 @@ export default function EmptyForm() {
               dir="ltr"
               className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:border-blue-600"
             />
-            <ErrorMessage name="email" component={PersonalError}/>
+            <ErrorMessage name="email" component={PersonalError} />
           </div>
 
           <div className="mb-6">
@@ -108,7 +120,7 @@ export default function EmptyForm() {
               name="password"
               className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:border-blue-600"
             >
-              {props => <PersonalFeild {...props}/>}
+              {(props) => <PersonalFeild {...props} />}
             </FastField>
           </div>
 
@@ -126,6 +138,69 @@ export default function EmptyForm() {
             />
             <ErrorMessage name="bio" />
           </div>
+          <div className="flex flex-row gap-10">
+            <div className="mb-6 w-1/2">
+              <label htmlFor="city" className="block text-sm mb-1.5">
+                نام شهر
+              </label>
+              <FastField
+                className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:border-blue-600"
+                name="addres.city"
+                type="text"
+                id="addres.city"
+              />
+              <ErrorMessage name="addres.city" component={PersonalError} />
+            </div>
+
+            <div className="mb-6 w-1/2">
+              <label htmlFor="postalCode" className="block text-sm mb-1.5">
+                کدپستی
+              </label>
+              <FastField
+                id="postalCode"
+                type="text"
+                name="addres.postalCode"
+                dir="ltr"
+                className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:border-blue-600"
+              />
+              <ErrorMessage
+                name="addres.postalCode"
+                component={PersonalError}
+              />
+            </div>
+          </div>
+
+          <div className="flex flex-row gap-10">
+            <div className="mb-6 w-1/2">
+              <label htmlFor="phone[0]" className="block text-sm mb-1.5">
+                تلفن همراه
+              </label>
+              <FastField
+                className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:border-blue-600"
+                name="phone[0]"
+                type="text"
+                id="phone[0]"
+              />
+              <ErrorMessage name="phone[0]" component={PersonalError} />
+            </div>
+
+            <div className="mb-6 w-1/2">
+              <label htmlFor="phone[1]" className="block text-sm mb-1.5">
+                تلفن ثابت
+              </label>
+              <FastField
+                id="phone[1]"
+                type="text"
+                name="phone[1]"
+                dir="ltr"
+                className="w-full px-3 py-2.5 border border-slate-300 rounded-lg text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:border-blue-600"
+              />
+              <ErrorMessage name="phone[1]" component={PersonalError} />
+            </div>
+          </div>
+          <FieldArray name="favorits">
+            {(arrayHelpers) => <FavoritsField {...arrayHelpers} />}
+          </FieldArray>
           <button
             className="py-2 px-4 rounded-lg mx-auto text-white bg-blue-500 w-full"
             type="submit"
