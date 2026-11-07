@@ -1,9 +1,17 @@
-@import "tailwindcss";
 @font-face {
-    font-family: "Yekan";
-    src: url(../public/fonts/BYekan-webfont.woff) format(woff);
-    
+  font-family: "Vazirmatn[wght]";
+  src: url(../public/fonts/Vazirmatn[wght].woff2);
 }
 *{
-    font-family: "Yekan";
+  font-family: "Vazirmatn[wght]";
+/* Edge password reveal button */
+input[type="password"]::-ms-reveal {
+  display: block;
+  margin-left: 8px;
 }
+
+/* Chrome / WebKit */
+input[type="password"]::-webkit-credentials-auto-fill-button {
+  margin-right: 8px;
+}
+}@import "tailwindcss";

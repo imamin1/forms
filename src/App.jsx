@@ -1,11 +1,12 @@
-import Login from "./Regester/Login";
+import React from 'react'
+import LoginForm from './components/LoginForm'
 
 const App = () => {
   return (
     <div>
-      <Login />
+      <LoginForm/>
     </div>
-  );
-};
+  )
+}
 
-export default App;
+export default App
